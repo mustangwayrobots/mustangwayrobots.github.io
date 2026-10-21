@@ -216,12 +216,16 @@
         
         const repos = await response.json();
 
-        // Filter valid repositories
-        let validProjects = repos.filter(repo => 
-          !repo.fork && 
-          !repo.archived && 
-          !ignoredRepos.includes(repo.name.toLowerCase())
-        );
+        // Filter valid repositories, excluding forks, archives, self-repos, and any repo tagged with 'hidden'
+        let validProjects = repos.filter(repo => {
+          if (repo.fork || repo.archived) return false;
+          if (ignoredRepos.includes(repo.name.toLowerCase())) return false;
+          
+          const topics = repo.topics || [];
+          if (topics.includes('hidden')) return false; // Hides any repo with the 'hidden' topic tag
+
+          return true;
+        });
 
         // Sort so that 'club-info-and-guides' always floats to the top (position #1)
         validProjects.sort((a, b) => {
@@ -241,7 +245,6 @@
         validProjects.forEach(repo => {
           const card = document.createElement('div');
           
-          // Check if this is our pinned documentation hub repo to give it special styling/labeling
           const isClubInfo = repo.name.toLowerCase() === 'club-info-and-guides';
           card.className = isClubInfo ? 'card card-pinned' : 'card';
 
@@ -252,14 +255,12 @@
           const repoTopics = repo.topics || [];
           const hasFirmware = repoTopics.some(topic => firmwareKeywords.includes(topic.toLowerCase()));
 
-          // Render action buttons
           let actionButtons = `
             <a href="${repo.html_url}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
               ${isClubInfo ? '🚀 Open Hub & Docs' : '💻 GitHub Repository & Docs'}
             </a>
           `;
 
-          // Only show flash button if it has firmware keywords AND isn't the club info repo
           if (hasFirmware && !isClubInfo) {
             actionButtons += `
               <a href="https://${GITHUB_USERNAME}.github.io/${repo.name}/flash/" class="btn btn-primary" target="_blank">

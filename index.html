@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mustang Way Robots | Project Portal</title>
+  <title>Mustang Way Robots | STEM Project Portal</title>
   
   <!-- Orbitron & Inter Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -16,11 +16,13 @@
       --card-bg: #0c1524;
       --accent-blue: #38bdf8;
       --accent-hover: #0284c7;
+      --accent-glow: rgba(56, 189, 248, 0.25);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border-color: #1e293b;
       --btn-secondary-bg: #1e293b;
       --btn-secondary-hover: #334155;
+      --hub-glow: rgba(56, 189, 248, 0.4);
     }
 
     * {
@@ -31,36 +33,85 @@
 
     body {
       background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #050b14 0%, #030710 100%);
       color: var(--text-main);
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
     }
 
     header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
       max-width: 800px;
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.5rem;
+      font-size: 2.75rem;
       font-weight: 900;
       color: var(--accent-blue);
       letter-spacing: 2px;
       text-transform: uppercase;
       margin-bottom: 0.5rem;
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+      text-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
     }
 
     p.subtitle {
       color: var(--text-muted);
       font-size: 1.1rem;
       font-weight: 400;
+    }
+
+    /* Controls & Search Bar Section */
+    .controls-section {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      pointer-events: none;
     }
 
     .container {
@@ -74,6 +125,7 @@
       gap: 1.5rem;
     }
 
+    /* Base Card Styling */
     .card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -82,19 +134,59 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      transition: background 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-5px);
       border-color: var(--accent-blue);
-      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow);
     }
 
-    /* Pinned styling specifically for the Club Info card */
+    .card:hover::before {
+      background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+    }
+
+    /* Pinned Central Hub Special Card Style */
     .card-pinned {
-      border-color: var(--accent-blue);
-      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.5);
+      background: linear-gradient(135deg, #0c1524 0%, #081220 100%);
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.15);
+    }
+
+    .card-pinned::before {
+      background: linear-gradient(90deg, #38bdf8, #0284c7);
+    }
+
+    .card-pinned:hover {
+      box-shadow: 0 12px 32px rgba(56, 189, 248, 0.3);
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
     }
 
     .card-title {
@@ -102,23 +194,56 @@
       font-size: 1.25rem;
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 0.75rem;
       letter-spacing: 1px;
+      line-height: 1.3;
+    }
+
+    .badge-hub {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      background-color: var(--accent-blue);
+      color: var(--bg-dark);
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
     }
 
     .card-description {
       color: var(--text-muted);
       font-size: 0.95rem;
       line-height: 1.5;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       flex-grow: 1;
     }
 
-    /* Button Layout */
+    /* Topic Badges Container */
+    .topic-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background-color: #162338;
+      color: #7dd3fc;
+      border: 1px solid #1e3a5f;
+      text-transform: uppercase;
+    }
+
+    /* Button Group Layout */
     .button-group {
       display: flex;
       flex-direction: column;
-      gap: 0.50rem;
+      gap: 0.55rem;
     }
 
     .btn {
@@ -130,21 +255,23 @@
       font-size: 0.8rem;
       font-weight: 800;
       text-decoration: none;
-      padding: 0.65rem 1rem;
+      padding: 0.7rem 1rem;
       border-radius: 8px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+      transition: all 0.2s ease;
     }
 
     .btn-primary {
       background-color: var(--accent-blue);
       color: var(--bg-dark);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.2);
     }
 
     .btn-primary:hover {
       background-color: var(--accent-hover);
       color: #ffffff;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
     }
 
     .btn-secondary {
@@ -163,7 +290,7 @@
       text-align: center;
       font-family: 'Orbitron', sans-serif;
       color: var(--text-muted);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-top: 4rem;
     }
 
@@ -180,12 +307,19 @@
 
   <header>
     <h1>Mustang Way Robots</h1>
-    <p class="subtitle">STEM Robotics & Project Hub</p>
+    <p class="subtitle">STEM Robotics & Microcontroller Hub</p>
   </header>
+
+  <div class="controls-section">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" class="search-input" placeholder="Search projects, hardware, firmware..." oninput="filterProjects()">
+    </div>
+  </div>
 
   <main class="container">
     <div id="repo-grid" class="grid"></div>
-    <div id="status" class="status-msg">Scanning for projects...</div>
+    <div id="status" class="status-msg">Scanning for organization projects...</div>
   </main>
 
   <footer>
@@ -201,91 +335,120 @@
       'mustangwayrobots.github.io'
     ];
 
+    let allLoadedProjects = [];
+
     async function loadRobotRepositories() {
-      const grid = document.getElementById('repo-grid');
       const status = document.getElementById('status');
 
       try {
         const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`, {
-          headers: {
-            'Accept': 'application/vnd.github.v3+json'
-          }
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
         });
         
         if (!response.ok) throw new Error('Failed to load project list');
         
         const repos = await response.json();
 
-        // Filter valid repositories, excluding forks, archives, self-repos, and any repo tagged with 'hidden'
-        let validProjects = repos.filter(repo => {
+        // Filter valid repositories (excluding forks, archives, self-repos, and hidden-tagged repos)
+        allLoadedProjects = repos.filter(repo => {
           if (repo.fork || repo.archived) return false;
           if (ignoredRepos.includes(repo.name.toLowerCase())) return false;
           
           const topics = repo.topics || [];
-          if (topics.includes('hidden')) return false; // Hides any repo with the 'hidden' topic tag
+          if (topics.includes('hidden')) return false;
 
           return true;
         });
 
-        // Sort so that 'club-info-and-guides' always floats to the top (position #1)
-        validProjects.sort((a, b) => {
+        // Sort so that 'club-info-and-guides' always sits permanently in Position #1
+        allLoadedProjects.sort((a, b) => {
           if (a.name.toLowerCase() === 'club-info-and-guides') return -1;
           if (b.name.toLowerCase() === 'club-info-and-guides') return 1;
           return 0;
         });
 
-        if (validProjects.length === 0) {
+        if (allLoadedProjects.length === 0) {
           status.textContent = 'No projects available.';
           return;
         }
 
         status.style.display = 'none';
-        grid.innerHTML = '';
-
-        validProjects.forEach(repo => {
-          const card = document.createElement('div');
-          
-          const isClubInfo = repo.name.toLowerCase() === 'club-info-and-guides';
-          card.className = isClubInfo ? 'card card-pinned' : 'card';
-
-          const cleanTitle = isClubInfo ? '📖 Club Info & Guidelines' : repo.name.replace(/[-_]/g, ' ');
-          const description = repo.description ? repo.description : 'Robotics project for Mustang Way Robots.';
-
-          const firmwareKeywords = ['firmware', 'embedded', 'microcontroller', 'esp32', 'attiny', 'arduino'];
-          const repoTopics = repo.topics || [];
-          const hasFirmware = repoTopics.some(topic => firmwareKeywords.includes(topic.toLowerCase()));
-
-          let actionButtons = `
-            <a href="${repo.html_url}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
-              ${isClubInfo ? '🚀 Open Hub & Docs' : '💻 GitHub Repository & Docs'}
-            </a>
-          `;
-
-          if (hasFirmware && !isClubInfo) {
-            actionButtons += `
-              <a href="https://${GITHUB_USERNAME}.github.io/${repo.name}/flash/" class="btn btn-primary" target="_blank">
-                ⚡ Flash Firmware
-              </a>
-            `;
-          }
-
-          card.innerHTML = `
-            <div>
-              <div class="card-title">${cleanTitle}</div>
-              <div class="card-description">${description}</div>
-            </div>
-            <div class="button-group">
-              ${actionButtons}
-            </div>
-          `;
-
-          grid.appendChild(card);
-        });
+        renderProjects(allLoadedProjects);
 
       } catch (err) {
         console.error(err);
         status.textContent = 'Unable to load projects at this time.';
       }
+    }
+
+    function renderProjects(projects) {
+      const grid = document.getElementById('repo-grid');
+      grid.innerHTML = '';
+
+      projects.forEach(repo => {
+        const card = document.createElement('div');
+        const isClubInfo = repo.name.toLowerCase() === 'club-info-and-guides';
+        
+        card.className = isClubInfo ? 'card card-pinned' : 'card';
+
+        const cleanTitle = isClubInfo ? '📖 Club Info & Guidelines' : repo.name.replace(/[-_]/g, ' ');
+        const description = repo.description 
+          ? repo.description 
+          : (isClubInfo ? 'Central hub for club operations, schedules, and teacher onboarding guides.' : 'Robotics project for Mustang Way Robots.');
+
+        const firmwareKeywords = ['firmware', 'embedded', 'microcontroller', 'esp32', 'attiny', 'arduino'];
+        const repoTopics = repo.topics || [];
+        const hasFirmware = repoTopics.some(topic => firmwareKeywords.includes(topic.toLowerCase()));
+
+        // Format Topic Tag Pills (excluding 'hidden' and 'project')
+        const visibleTags = repoTopics.filter(t => !['hidden', 'project', 'robotics'].includes(t.toLowerCase()));
+        let tagsHTML = '';
+        if (visibleTags.length > 0 && !isClubInfo) {
+          tagsHTML = `<div class="topic-tags">${visibleTags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`;
+        }
+
+        // Action Buttons
+        let actionButtons = `
+          <a href="${repo.html_url}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
+            ${isClubInfo ? '🚀 Open Hub & Docs' : '💻 GitHub Repository & Docs'}
+          </a>
+        `;
+
+        if (hasFirmware && !isClubInfo) {
+          actionButtons += `
+            <a href="https://${GITHUB_USERNAME}.github.io/${repo.name}/flash/" class="btn btn-primary" target="_blank">
+              ⚡ Flash Firmware
+            </a>
+          `;
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="card-header-row">
+              <div class="card-title">${cleanTitle}</div>
+              ${isClubInfo ? '<span class="badge-hub">HUB</span>' : ''}
+            </div>
+            <div class="card-description">${description}</div>
+            ${tagsHTML}
+          </div>
+          <div class="button-group">
+            ${actionButtons}
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function filterProjects() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = allLoadedProjects.filter(repo => {
+        const title = repo.name.toLowerCase().replace(/[-_]/g, ' ');
+        const desc = (repo.description || '').toLowerCase();
+        const topics = (repo.topics || []).join(' ').toLowerCase();
+        return title.includes(query) || desc.includes(query) || topics.includes(query);
+      });
+      renderProjects(filtered);
     }
 
     loadRobotRepositories();

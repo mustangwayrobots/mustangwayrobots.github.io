@@ -417,7 +417,6 @@
         const repoTopics = repo.topics || [];
         const hasFirmware = repoTopics.some(topic => firmwareKeywords.includes(topic.toLowerCase()));
 
-        // Assign smart icons and badges based on repo type
         let iconSymbol = '📁';
         let badgeHTML = '<span class="badge-project">PROJECT</span>';
 
@@ -436,30 +435,37 @@
           ? repo.description 
           : (isClubInfo ? 'Central hub for club operations, schedules, and teacher onboarding guides.' : 'Robotics project for Mustang Way Robots.');
 
-        // Format Topic Tag Pills (excluding internal tags)
         const visibleTags = repoTopics.filter(t => !['hidden', 'project', 'robotics'].includes(t.toLowerCase()));
         let tagsHTML = '';
         if (visibleTags.length > 0 && !isClubInfo) {
           tagsHTML = `<div class="topic-tags">${visibleTags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`;
         }
 
-        // Action Buttons: Target GitHub Pages site for Club Info, standard repo link for projects
-        const destinationUrl = isClubInfo 
-          ? `https://${GITHUB_USERNAME}.github.io/${repo.name}/`
-          : repo.html_url;
+        // Action Buttons: 
+        // - GitHub Repository link opens in a NEW tab (target="_blank")
+        // - Hub and Flash links open in the SAME tab (no target="_blank")
+        const hubUrl = `https://${GITHUB_USERNAME}.github.io/${repo.name}/`;
 
-        let actionButtons = `
-          <a href="${destinationUrl}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
-            ${isClubInfo ? '🚀 Open Hub & Docs' : '💻 GitHub Repository & Docs'}
-          </a>
-        `;
-
-        if (hasFirmware && !isClubInfo) {
-          actionButtons += `
-            <a href="https://${GITHUB_USERNAME}.github.io/${repo.name}/flash/" class="btn btn-primary" target="_blank">
-              ⚡ Flash Firmware
+        let actionButtons = '';
+        if (isClubInfo) {
+          actionButtons = `
+            <a href="${hubUrl}" class="btn btn-primary">
+              🚀 Open Hub & Docs
             </a>
           `;
+        } else {
+          actionButtons = `
+            <a href="${repo.html_url}" class="btn btn-secondary" target="_blank">
+              💻 GitHub Repository & Docs
+            </a>
+          `;
+          if (hasFirmware) {
+            actionButtons += `
+              <a href="https://${GITHUB_USERNAME}.github.io/${repo.name}/flash/" class="btn btn-primary">
+                ⚡ Flash Firmware
+              </a>
+            `;
+          }
         }
 
         card.innerHTML = `

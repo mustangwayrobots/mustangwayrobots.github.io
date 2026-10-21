@@ -443,9 +443,13 @@
           tagsHTML = `<div class="topic-tags">${visibleTags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`;
         }
 
-        // Action Buttons
+        // Action Buttons: Target GitHub Pages site for Club Info, standard repo link for projects
+        const destinationUrl = isClubInfo 
+          ? `https://${GITHUB_USERNAME}.github.io/${repo.name}/`
+          : repo.html_url;
+
         let actionButtons = `
-          <a href="${repo.html_url}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
+          <a href="${destinationUrl}" class="btn ${isClubInfo ? 'btn-primary' : 'btn-secondary'}" target="_blank">
             ${isClubInfo ? '🚀 Open Hub & Docs' : '💻 GitHub Repository & Docs'}
           </a>
         `;

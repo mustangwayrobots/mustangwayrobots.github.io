@@ -187,6 +187,11 @@
       background: linear-gradient(90deg, var(--admin-amber), #d97706);
     }
 
+    .card-admin:hover {
+      border-color: var(--admin-amber);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.25);
+    }
+
     .card-header-row {
       display: flex;
       justify-content: space-between;
@@ -335,6 +340,18 @@
       color: var(--accent-blue);
     }
 
+    .btn-admin {
+      background-color: var(--admin-amber);
+      color: var(--bg-dark);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-admin:hover {
+      background-color: #d97706;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+
     /* Admin Section Divider Styles */
     .admin-section-divider {
       width: 100%;
@@ -447,7 +464,6 @@
           return true;
         });
 
-        // Separate student projects vs admin-tagged repos
         allLoadedProjects = [];
         allAdminProjects = [];
 
@@ -460,7 +476,6 @@
           }
         });
 
-        // Sort 'club-info-and-guides' to Position #1 permanently in student projects
         allLoadedProjects.sort((a, b) => {
           if (a.name.toLowerCase() === 'club-info-and-guides') return -1;
           if (b.name.toLowerCase() === 'club-info-and-guides') return 1;
@@ -489,7 +504,6 @@
       grid.innerHTML = '';
       adminGrid.innerHTML = '';
 
-      // Render Student Projects Grid
       projects.forEach(repo => {
         const card = document.createElement('div');
         const isClubInfo = repo.name.toLowerCase() === 'club-info-and-guides';
@@ -565,7 +579,6 @@
         grid.appendChild(card);
       });
 
-      // Render Admin / Template Repos Grid
       if (adminProjects.length > 0) {
         adminDivider.style.display = 'flex';
         adminProjects.forEach(repo => {
@@ -584,7 +597,12 @@
             tagsHTML = `<div class="topic-tags">${visibleTags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`;
           }
 
+          const siteUrl = `https://${GITHUB_USERNAME}.github.io/${repo.name}/`;
+
           const actionButtons = `
+            <a href="${siteUrl}" class="btn btn-admin">
+              🚀 Launch Control Center
+            </a>
             <a href="${repo.html_url}" class="btn btn-secondary" target="_blank">
               💻 GitHub Repository
             </a>

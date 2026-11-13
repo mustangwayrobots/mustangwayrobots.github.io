@@ -13,45 +13,47 @@
   <!--
     ==========================================================================
     Mustang Way Robots - organization home page (mustangwayrobots.github.io)
+    This file goes in the root of the mustangwayrobots.github.io repo.
 
     The project list builds itself from the organization's GitHub repos.
     Control it with repo TOPICS (repo page > gear next to "About"):
-      firmware / esp32 / arduino / ...  card gets a "Flash Firmware" button
+      firmware / esp32 / arduino / ...  card gets a "Flash firmware" button
                                         (the repo needs a flash/ page)
-      admin                             card goes to "Instructor & Template Tools"
+      admin                             card goes to "Instructor tools" at the
+                                        bottom (collapsed, opens on GitHub)
       hidden                            repo is not shown at all
     The description on each card is the repo's GitHub "About" description.
 
-    To change the Featured section, edit FEATURED near the top of the script.
+    The club rules repo and the featured repos are shown in their own
+    sections, so they are left out of the project library.
+    To change them, edit RULES_REPO and FEATURED near the top of the script.
     ==========================================================================
   -->
 
   <style>
     :root {
       --bg: #050b14;
-      --bg-2: #08111f;
       --card: #0c1524;
       --card-2: #101c30;
       --accent: #38bdf8;
       --accent-2: #0ea5e9;
       --accent-glow: rgba(56, 189, 248, 0.35);
-      --ok: #34d399;
-      --warn: #fbbf24;
+      --rules: #fbbf24;
       --admin: #a78bfa;
       --text: #f8fafc;
       --muted: #94a3b8;
       --dim: #64748b;
       --border: #1e293b;
       --border-2: #27364d;
-      --max: 1120px;
+      --max: 1200px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
     body {
       background:
-        radial-gradient(ellipse 80% 45% at 50% -5%, rgba(56, 189, 248, 0.16), transparent 70%),
+        radial-gradient(ellipse 80% 45% at 50% -5%, rgba(56, 189, 248, 0.14), transparent 70%),
         linear-gradient(rgba(56, 189, 248, 0.035) 1px, transparent 1px) 0 0 / 32px 32px,
         linear-gradient(90deg, rgba(56, 189, 248, 0.035) 1px, transparent 1px) 0 0 / 32px 32px,
         var(--bg);
@@ -62,13 +64,13 @@
     }
 
     a { color: var(--accent); text-decoration: none; }
-    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
 
     /* ---------- top bar ---------- */
     .topbar {
       position: sticky; top: 0; z-index: 10;
       backdrop-filter: blur(10px);
-      background: rgba(5, 11, 20, 0.75);
+      background: rgba(5, 11, 20, 0.8);
       border-bottom: 1px solid var(--border);
     }
     .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 1rem; }
@@ -82,32 +84,31 @@
     }
     .logo svg { width: 20px; height: 20px; }
     .brand-name { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: .95rem; letter-spacing: 1.5px; }
-    .nav { display: flex; gap: 1.4rem; align-items: center; }
-    .nav a { color: var(--muted); font-size: .88rem; font-weight: 500; transition: color .15s; }
+    .nav { display: flex; gap: 1.6rem; align-items: center; }
+    .nav a { color: var(--muted); font-size: .9rem; font-weight: 500; transition: color .15s; }
     .nav a:hover { color: var(--text); }
+    .nav .rules-link { color: #fde68a; }
     .nav .gh { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border-2); border-radius: 999px; }
     .nav .gh svg { width: 16px; height: 16px; fill: currentColor; }
 
     /* ---------- hero ---------- */
-    .hero { padding: 5rem 0 3.5rem; text-align: center; }
+    .hero { padding: 4rem 0 2.5rem; text-align: center; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--accent);
       border: 1px solid rgba(56,189,248,.35); background: rgba(56,189,248,.07);
-      padding: 6px 14px; border-radius: 999px; margin-bottom: 1.6rem;
+      padding: 6px 14px; border-radius: 999px; margin-bottom: 1.4rem;
     }
-    .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
     h1 {
       font-family: 'Orbitron', sans-serif; font-weight: 900;
-      font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.08; letter-spacing: 1px;
+      font-size: 3.6rem; line-height: 1.08; letter-spacing: 1px;
     }
     h1 .glow {
       background: linear-gradient(90deg, #7dd3fc, var(--accent), #0284c7);
       -webkit-background-clip: text; background-clip: text; color: transparent;
       filter: drop-shadow(0 0 22px rgba(56,189,248,.35));
     }
-    .lead { color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem); max-width: 640px; margin: 1.3rem auto 2.2rem; }
-    .cta { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+    .lead { color: var(--muted); font-size: 1.12rem; max-width: 640px; margin: 1.2rem auto 0; }
 
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -120,23 +121,34 @@
     .btn-primary:hover { box-shadow: 0 8px 28px rgba(14,165,233,.5); }
     .btn-ghost { background: rgba(255,255,255,.02); color: var(--text); border-color: var(--border-2); }
     .btn-ghost:hover { border-color: var(--accent); }
+    .btn-rules { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1c1203; box-shadow: 0 6px 22px rgba(245,158,11,.3); font-size: 1rem; padding: .9rem 1.5rem; }
+    .btn-rules:hover { box-shadow: 0 8px 28px rgba(245,158,11,.45); }
     .btn-admin { background: rgba(167,139,250,.12); color: #ddd6fe; border-color: rgba(167,139,250,.45); }
-    .btn-sm { padding: .55rem .9rem; font-size: .82rem; }
-
-    .stats { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; }
-    .stat {
-      min-width: 150px; padding: 1rem 1.4rem; border-radius: 14px;
-      background: rgba(12,21,36,.7); border: 1px solid var(--border);
-    }
-    .stat-num { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 1.6rem; color: var(--accent); }
-    .stat-label { color: var(--dim); font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-sm { padding: .55rem .9rem; font-size: .84rem; }
 
     /* ---------- sections ---------- */
-    section { padding: 3.5rem 0; }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    section { padding: 2.5rem 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.4rem; flex-wrap: wrap; }
     .kicker { font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; }
-    h2 { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: clamp(1.4rem, 3vw, 1.9rem); margin-top: .3rem; }
-    .section-sub { color: var(--muted); max-width: 560px; }
+    h2 { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 1.8rem; margin-top: .3rem; }
+
+    /* ---------- club rules ---------- */
+    .rules {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 2rem; align-items: center;
+      padding: 2rem 2.2rem; border-radius: 20px;
+      border: 2px solid rgba(251,191,36,.55);
+      background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.03) 55%, var(--card));
+      box-shadow: 0 0 40px rgba(251,191,36,.08);
+    }
+    .rules-icon {
+      width: 84px; height: 84px; border-radius: 18px; display: grid; place-items: center; font-size: 2.6rem;
+      background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.45);
+    }
+    .rules .kicker { color: var(--rules); }
+    .rules h2 { margin-top: .2rem; }
+    .rules p { color: #e2e8f0; margin-top: .5rem; max-width: 640px; }
+    .rules p b { color: #fde68a; }
+    .rules-actions { display: flex; flex-direction: column; gap: .6rem; align-items: stretch; }
 
     /* ---------- featured ---------- */
     .featured {
@@ -145,7 +157,7 @@
       background: linear-gradient(135deg, var(--card-2), var(--card));
       box-shadow: 0 20px 60px rgba(0,0,0,.35);
     }
-    .featured-media { position: relative; min-height: 300px; background: #0a1322; }
+    .featured-media { position: relative; min-height: 320px; background: #0a1322; }
     .featured-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .featured-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 55%, var(--card-2)); }
     .featured-media .placeholder { position: absolute; inset: 0; display: grid; place-items: center; font-size: 4rem; opacity: .35; }
@@ -156,27 +168,27 @@
     .chip { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--muted); border: 1px solid var(--border-2); border-radius: 6px; padding: 3px 8px; }
     .pair { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .3rem; }
     .pair-item { border: 1px solid var(--border-2); border-radius: 12px; padding: .9rem; background: rgba(5,11,20,.5); display: flex; flex-direction: column; gap: .6rem; }
-    .pair-item .label { font-weight: 700; font-size: .92rem; }
+    .pair-item .label { font-weight: 700; font-size: .95rem; }
     .pair-item .links { display: flex; gap: .4rem; }
     .pair-item .links .btn { flex: 1; padding-left: .5rem; padding-right: .5rem; }
-    .note { display: flex; gap: 8px; align-items: flex-start; font-size: .84rem; color: #fde68a; background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.3); border-radius: 10px; padding: .65rem .8rem; }
 
     /* ---------- get started ---------- */
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .step { padding: 1.5rem; border-radius: 16px; background: var(--card); border: 1px solid var(--border); position: relative; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .step { padding: 1.4rem; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
     .step-num {
-      width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 1rem;
+      width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: .9rem;
       font-family: 'Orbitron', sans-serif; font-weight: 800; color: var(--accent);
       border: 1px solid rgba(56,189,248,.45); background: rgba(56,189,248,.08);
     }
-    .step h3 { font-size: 1.02rem; margin-bottom: .4rem; }
+    .step.rules-step .step-num { color: var(--rules); border-color: rgba(251,191,36,.45); background: rgba(251,191,36,.08); }
+    .step h3 { font-size: 1rem; margin-bottom: .4rem; }
     .step p { color: var(--muted); font-size: .9rem; }
     .step b { color: var(--text); }
 
     /* ---------- project grid ---------- */
     .tools { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
     .search {
-      display: flex; align-items: center; gap: 8px; min-width: 260px;
+      display: flex; align-items: center; gap: 8px; width: 300px;
       background: var(--card); border: 1px solid var(--border-2); border-radius: 10px; padding: 0 .8rem;
     }
     .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(56,189,248,.15); }
@@ -189,14 +201,13 @@
     }
     .filter.active { color: #03121f; background: var(--accent); border-color: var(--accent); }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1rem; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .card {
       display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
       padding: 1.4rem; border-radius: 16px; background: var(--card); border: 1px solid var(--border);
       transition: border-color .15s, transform .15s, box-shadow .15s;
     }
     .card:hover { border-color: var(--border-2); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.3); }
-    .card.pinned { border-color: rgba(52,211,153,.4); background: linear-gradient(160deg, rgba(52,211,153,.07), var(--card) 60%); }
     .card.admin { border-color: rgba(167,139,250,.3); }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .8rem; }
     .card-icon { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font-size: 1.2rem; background: var(--card-2); border: 1px solid var(--border-2); flex: none; }
@@ -205,7 +216,6 @@
     .badge { font-family: 'JetBrains Mono', monospace; font-size: .66rem; font-weight: 500; letter-spacing: .5px; padding: 3px 8px; border-radius: 6px; border: 1px solid; white-space: nowrap; }
     .badge-fw { color: var(--accent); border-color: rgba(56,189,248,.4); background: rgba(56,189,248,.08); }
     .badge-proj { color: var(--muted); border-color: var(--border-2); }
-    .badge-hub { color: var(--ok); border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.08); }
     .badge-admin { color: var(--admin); border-color: rgba(167,139,250,.4); background: rgba(167,139,250,.08); }
     .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: .8rem; }
     .meta { color: var(--dim); font-size: .76rem; margin-top: .7rem; }
@@ -216,36 +226,35 @@
     @keyframes shimmer { to { background-position: -200% 0; } }
 
     .status { color: var(--muted); text-align: center; padding: 2rem 0; }
-    .status.warn { color: var(--warn); }
+    .status.warn { color: var(--rules); }
 
     details.admin-wrap { margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
-    details.admin-wrap summary { cursor: pointer; color: var(--muted); font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+    details.admin-wrap summary { cursor: pointer; color: var(--dim); font-weight: 600; font-size: .9rem; list-style: none; display: inline-flex; align-items: center; gap: 8px; }
     details.admin-wrap summary::-webkit-details-marker { display: none; }
-    details.admin-wrap summary .chev { transition: transform .15s; }
+    details.admin-wrap summary .chev { transition: transform .15s; font-size: .7rem; }
     details.admin-wrap[open] summary .chev { transform: rotate(90deg); }
     details.admin-wrap .grid { margin-top: 1.2rem; }
 
     /* ---------- footer ---------- */
-    footer { border-top: 1px solid var(--border); margin-top: 3rem; padding: 2rem 0 2.5rem; color: var(--dim); font-size: .85rem; }
+    footer { border-top: 1px solid var(--border); margin-top: 2.5rem; padding: 2rem 0 2.5rem; color: var(--dim); font-size: .85rem; }
     footer .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     footer a { color: var(--muted); }
     footer a:hover { color: var(--text); }
 
-    @media (max-width: 860px) {
-      .featured { grid-template-columns: 1fr; }
-      .featured-media { min-height: 220px; }
-      .featured-media::after { background: linear-gradient(180deg, transparent 55%, var(--card-2)); }
-      .steps { grid-template-columns: 1fr; }
-      .nav a:not(.gh) { display: none; }
+    /* Laptop/desktop first. Narrow windows just stack things so nothing breaks. */
+    @media (max-width: 1000px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .rules { grid-template-columns: auto 1fr; }
+      .rules-actions { grid-column: 1 / -1; flex-direction: row; }
     }
-    @media (max-width: 520px) {
-      .pair { grid-template-columns: 1fr; }
-      .search { min-width: 0; flex: 1; }
-      .stats { flex-wrap: nowrap; gap: .5rem; }
-      .stat { min-width: 0; flex: 1; padding: .8rem .5rem; }
-      .stat-num { font-size: 1.25rem; }
-      .stat-label { font-size: .62rem; letter-spacing: .5px; }
-      .hero { padding-top: 3.5rem; }
+    @media (max-width: 760px) {
+      .wrap { padding: 0 1rem; }
+      h1 { font-size: 2.4rem; }
+      .featured, .grid, .steps, .pair { grid-template-columns: 1fr; }
+      .rules { grid-template-columns: 1fr; }
+      .featured-media::after { background: linear-gradient(180deg, transparent 55%, var(--card-2)); }
+      .nav a:not(.gh):not(.rules-link) { display: none; }
     }
   </style>
 </head>
@@ -258,6 +267,7 @@
         <span class="brand-name">MUSTANG WAY ROBOTS</span>
       </a>
       <nav class="nav">
+        <a class="rules-link" href="#rules">📖 Club rules</a>
         <a href="#featured">Featured</a>
         <a href="#start">Get started</a>
         <a href="#projects">Projects</a>
@@ -273,20 +283,28 @@
     <!-- ================= HERO ================= -->
     <div class="hero">
       <div class="wrap">
-        <div class="eyebrow"><span class="dot"></span>Downers Grove South High School · Robotics Club</div>
+        <div class="eyebrow">Downers Grove South High School · Robotics Club</div>
         <h1>Build it. Code it.<br><span class="glow">Drive it.</span></h1>
-        <p class="lead">Student-built robots, from custom PCBs and 3D-printed chassis to the firmware that runs them. Flash any project straight from your browser.</p>
-        <div class="cta">
-          <a class="btn btn-primary" href="#featured">⚡ Flash the RC Car</a>
-          <a class="btn btn-ghost" href="#projects">Browse projects</a>
-        </div>
-        <div class="stats">
-          <div class="stat"><div class="stat-num" id="stat-projects">–</div><div class="stat-label">Projects</div></div>
-          <div class="stat"><div class="stat-num" id="stat-firmware">–</div><div class="stat-label">Flashable firmware</div></div>
-          <div class="stat"><div class="stat-num" id="stat-updated">–</div><div class="stat-label">Last update</div></div>
-        </div>
+        <p class="lead">Student-built robots, from custom PCBs and 3D-printed chassis to the firmware that runs them. Flash any project from Chrome or Edge on your laptop.</p>
       </div>
     </div>
+
+    <!-- ================= CLUB RULES ================= -->
+    <section id="rules">
+      <div class="wrap">
+        <div class="rules">
+          <div class="rules-icon">📖</div>
+          <div>
+            <div class="kicker">Required reading · every member</div>
+            <h2>Club Info &amp; Guidelines</h2>
+            <p id="rules-desc">Club rules, safety expectations, schedules and onboarding guides. <b>Read these before you work on any robot.</b> Not having read them is not an excuse.</p>
+          </div>
+          <div class="rules-actions">
+            <a class="btn btn-rules" id="rules-open" href="#">📖 Read the club rules</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ================= FEATURED ================= -->
     <section id="featured">
@@ -307,22 +325,27 @@
         <div class="section-head">
           <div>
             <div class="kicker">New here?</div>
-            <h2>Get started in three steps</h2>
+            <h2>Get started</h2>
           </div>
         </div>
         <div class="steps">
-          <div class="step">
+          <div class="step rules-step">
             <div class="step-num">1</div>
-            <h3>Use Chrome or Edge</h3>
-            <p>Web flashing needs <b>Chrome</b> or <b>Edge</b> on a laptop or desktop. Plug the board in with a USB cable that carries data, not just charge.</p>
+            <h3>Read the club rules</h3>
+            <p>Open <a href="#rules"><b>Club Info &amp; Guidelines</b></a> and read it all before your first build.</p>
           </div>
           <div class="step">
             <div class="step-num">2</div>
-            <h3>Flash the firmware</h3>
-            <p>Open the project's <b>Flash Firmware</b> page and pick your board version. When asked <b>Erase device?</b>, leave it unchecked to keep your pairing and settings.</p>
+            <h3>Use a laptop with Chrome or Edge</h3>
+            <p>Flashing works in <b>Chrome</b> or <b>Edge</b> on a Windows laptop, Mac or Chromebook. Plug the board in with the <b>club USB-C cable</b>.</p>
           </div>
           <div class="step">
             <div class="step-num">3</div>
+            <h3>Flash the firmware</h3>
+            <p>Click <b>⚡ Flash</b> for the car or controller and pick your board version. When asked <b>Erase device?</b>, leave it unchecked to keep your pairing.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
             <h3>Pair and drive</h3>
             <p>Hold <b>MENU</b> on the controller and the <b>bind button</b> on the car while switching each on. Pairing is saved, so you only do it once.</p>
           </div>
@@ -335,7 +358,7 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <div class="kicker">All projects</div>
+            <div class="kicker">More projects</div>
             <h2>Project library</h2>
           </div>
           <div class="tools">
@@ -355,7 +378,7 @@
         <div id="status" class="status" hidden></div>
 
         <details class="admin-wrap" id="admin-wrap" hidden>
-          <summary><span class="chev">▶</span> ⚙️ Instructor &amp; template tools</summary>
+          <summary><span class="chev">▶</span> ⚙️ Instructor tools</summary>
           <div id="admin-grid" class="grid"></div>
         </details>
       </div>
@@ -375,13 +398,13 @@
     // =========================================================================
     const ORG = 'mustangwayrobots';
     const IGNORED_REPOS = ['mustangwayrobots', 'mustangwayrobots.github.io'];
-    const PINNED_REPO = 'club-info-and-guides';          // always first, links to its own site
+    const RULES_REPO = 'club-info-and-guides';   // shown in the "Club Info & Guidelines" box
     const FIRMWARE_TOPICS = ['firmware', 'embedded', 'microcontroller', 'esp32', 'attiny', 'arduino'];
-    const CACHE_KEY = 'mwr-repos-v1';
+    const CACHE_KEY = 'mwr-repos-v2';
     const CACHE_MINUTES = 15;   // GitHub allows ~60 list requests per hour per school network
 
-    // Featured section. Add, remove or edit entries here.
-    // "parts" are shown side by side, each with its own buttons.
+    // Featured section. "parts" are shown side by side, each with its own buttons.
+    // These repos are left out of the project library so their Flash button only appears here.
     const FEATURED = {
       title: 'ESP-NOW RC Car',
       description: 'A custom-PCB RC car and handheld controller built around the ESP32-C3, talking over low-latency ESP-NOW. Two N20 gear motors, a DRV8833 driver, a servo weapon and a 1S LiPo. Next year it becomes an ant-weight battle bot.',
@@ -390,8 +413,7 @@
       parts: [
         { label: '🚗 Car', repo: 'ESP_NOW_CAR' },
         { label: '🎮 Controller', repo: 'ESP_NOW_Controller' }
-      ],
-      note: 'Flash the car and the controller from the same day\'s firmware. They must run the same protocol version to talk to each other.'
+      ]
     };
 
     // =========================================================================
@@ -403,6 +425,7 @@
     const pagesUrl = (repo) => `https://${ORG}.github.io/${repo}/`;
     const repoUrl = (repo) => `https://github.com/${ORG}/${repo}`;
     const isFirmware = (r) => (r.topics || []).some(t => FIRMWARE_TOPICS.includes(t.toLowerCase()));
+    const SHOWN_ELSEWHERE = [RULES_REPO, ...FEATURED.parts.map(p => p.repo)].map(n => n.toLowerCase());
 
     function timeAgo(iso) {
       const days = Math.floor((Date.now() - new Date(iso)) / 86400000);
@@ -435,7 +458,6 @@
         });
         if (!res.ok) throw new Error(`GitHub answered ${res.status}`);
         const all = await res.json();
-        // Keep only what the page uses, so the cache stays small
         const repos = all.map(r => ({
           name: r.name, description: r.description, topics: r.topics || [],
           html_url: r.html_url, pushed_at: r.pushed_at, fork: r.fork, archived: r.archived
@@ -455,6 +477,10 @@
     let students = [];
     let admins = [];
     let activeFilter = 'all';
+
+    function renderRules() {
+      $('rules-open').href = pagesUrl(RULES_REPO);
+    }
 
     function renderFeatured() {
       const f = FEATURED;
@@ -477,42 +503,33 @@
             <p>${esc(f.description)}</p>
             <div class="chips">${f.chips.map(c => `<span class="chip">${esc(c)}</span>`).join('')}</div>
             <div class="pair">${parts}</div>
-            <div class="note"><span>⚠️</span><span>${esc(f.note)}</span></div>
           </div>
         </article>`;
     }
 
     function projectCard(r, admin) {
-      const pinned = r.name.toLowerCase() === PINNED_REPO;
       const fw = isFirmware(r);
       let icon = '📁', badge = '<span class="badge badge-proj">PROJECT</span>';
-      if (admin)       { icon = '⚙️'; badge = '<span class="badge badge-admin">ADMIN / TEMPLATE</span>'; }
-      else if (pinned) { icon = '📖'; badge = '<span class="badge badge-hub">HUB</span>'; }
-      else if (fw)     { icon = '⚡'; badge = '<span class="badge badge-fw">FIRMWARE</span>'; }
+      if (admin)   { icon = '⚙️'; badge = '<span class="badge badge-admin">INSTRUCTOR</span>'; }
+      else if (fw) { icon = '⚡'; badge = '<span class="badge badge-fw">FIRMWARE</span>'; }
 
-      const title = pinned ? 'Club Info & Guidelines' : prettyName(r.name);
-      const desc = r.description || (pinned
-        ? 'Central hub for club operations, schedules and onboarding guides.'
-        : admin ? 'Instructor utility or master template repository.' : 'Robotics project for Mustang Way Robots.');
+      const desc = r.description || (admin ? 'Instructor guide or template.' : 'Robotics project for Mustang Way Robots.');
       const hideTags = ['hidden', 'admin', 'project', 'robotics'];
       const tags = (r.topics || []).filter(t => !hideTags.includes(t.toLowerCase()));
 
       let actions = '';
-      if (pinned) {
-        actions = `<a class="btn btn-primary btn-sm" href="${pagesUrl(r.name)}">🚀 Open hub &amp; docs</a>`;
-      } else if (admin) {
-        actions = `<a class="btn btn-admin btn-sm" href="${pagesUrl(r.name)}">🚀 Launch</a>
-                   <a class="btn btn-ghost btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">GitHub</a>`;
+      if (admin) {
+        actions = `<a class="btn btn-admin btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">Open on GitHub</a>`;
       } else {
         if (fw) actions += `<a class="btn btn-primary btn-sm" href="${pagesUrl(r.name)}flash/">⚡ Flash firmware</a>`;
         actions += `<a class="btn btn-ghost btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">Code &amp; docs</a>`;
       }
 
       return `
-        <article class="card${pinned ? ' pinned' : ''}${admin ? ' admin' : ''}">
+        <article class="card${admin ? ' admin' : ''}">
           <div>
             <div class="card-top"><div class="card-icon">${icon}</div>${badge}</div>
-            <div class="card-title">${esc(title)}</div>
+            <div class="card-title">${esc(prettyName(r.name))}</div>
             <div class="card-desc">${esc(desc)}</div>
             ${tags.length ? `<div class="tags">${tags.map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>` : ''}
             ${r.pushed_at ? `<div class="meta">Updated ${timeAgo(r.pushed_at)}</div>` : ''}
@@ -535,7 +552,7 @@
       const status = $('status');
       status.hidden = list.length > 0;
       status.className = 'status';
-      if (!list.length) status.textContent = 'No projects match your search.';
+      if (!list.length) status.textContent = students.length ? 'No projects match your search.' : 'More projects coming soon.';
 
       const adminList = admins.filter(r => matches(r, q));
       $('admin-wrap').hidden = adminList.length === 0;
@@ -543,7 +560,7 @@
     }
 
     function renderSkeletons() {
-      $('grid').innerHTML = Array.from({ length: 6 }, () => `
+      $('grid').innerHTML = Array.from({ length: 3 }, () => `
         <div class="card skeleton">
           <div><div class="bar" style="width:40px;height:40px;border-radius:10px"></div>
           <div class="bar" style="width:60%;margin-top:1rem"></div>
@@ -553,18 +570,12 @@
         </div>`).join('');
     }
 
-    function renderStats(all) {
-      $('stat-projects').textContent = students.length;
-      $('stat-firmware').textContent = students.filter(isFirmware).length;
-      const latest = all.map(r => r.pushed_at).filter(Boolean).sort().pop();
-      $('stat-updated').textContent = latest ? timeAgo(latest) : '–';
-    }
-
     // =========================================================================
     // Start
     // =========================================================================
     async function start() {
       $('year').textContent = new Date().getFullYear();
+      renderRules();
       renderFeatured();
       renderSkeletons();
 
@@ -579,10 +590,9 @@
         const { repos, stale } = await loadRepos();
         const visible = repos.filter(r => !r.fork && !r.archived && !IGNORED_REPOS.includes(r.name.toLowerCase()));
         admins = visible.filter(r => r.topics.includes('admin'));
-        students = visible.filter(r => !r.topics.includes('admin') && !r.topics.includes('hidden'));
-        students.sort((a, b) => (b.name.toLowerCase() === PINNED_REPO) - (a.name.toLowerCase() === PINNED_REPO)
-                              || new Date(b.pushed_at) - new Date(a.pushed_at));
-        renderStats(visible.filter(r => !r.topics.includes('hidden')));
+        students = visible.filter(r => !r.topics.includes('admin') && !r.topics.includes('hidden')
+                                    && !SHOWN_ELSEWHERE.includes(r.name.toLowerCase()));
+        students.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
         renderGrid();
         if (stale) {
           const s = $('status');

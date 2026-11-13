@@ -24,9 +24,9 @@
       hidden                            repo is not shown at all
     The description on each card is the repo's GitHub "About" description.
 
-    The club rules repo and the featured repos are shown in their own
-    sections, so they are left out of the project library.
-    To change them, edit RULES_REPO and FEATURED near the top of the script.
+    The club rules repo has its own box, so it is left out of the project library.
+    To change it or the Featured section, edit RULES_REPO and FEATURED near the
+    top of the script.
     ==========================================================================
   -->
 
@@ -173,7 +173,7 @@
     .pair-item .links .btn { flex: 1; padding-left: .5rem; padding-right: .5rem; }
 
     /* ---------- get started ---------- */
-    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .step { padding: 1.4rem; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
     .step-num {
       width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: .9rem;
@@ -244,7 +244,7 @@
     /* Laptop/desktop first. Narrow windows just stack things so nothing breaks. */
     @media (max-width: 1000px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
-      .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; }
       .rules { grid-template-columns: auto 1fr; }
       .rules-actions { grid-column: 1 / -1; flex-direction: row; }
     }
@@ -342,12 +342,7 @@
           <div class="step">
             <div class="step-num">3</div>
             <h3>Flash the firmware</h3>
-            <p>Click <b>⚡ Flash</b> for the car or controller and pick your board version. When asked <b>Erase device?</b>, leave it unchecked to keep your pairing.</p>
-          </div>
-          <div class="step">
-            <div class="step-num">4</div>
-            <h3>Pair and drive</h3>
-            <p>Hold <b>MENU</b> on the controller and the <b>bind button</b> on the car while switching each on. Pairing is saved, so you only do it once.</p>
+            <p>Click <b>⚡ Flash</b> on the project and pick your board version. When asked <b>Erase device?</b>, leave it unchecked to keep your saved settings.</p>
           </div>
         </div>
       </div>
@@ -358,7 +353,7 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <div class="kicker">More projects</div>
+            <div class="kicker">All projects</div>
             <h2>Project library</h2>
           </div>
           <div class="tools">
@@ -398,14 +393,13 @@
     // =========================================================================
     const ORG = 'mustangwayrobots';
     const IGNORED_REPOS = ['mustangwayrobots', 'mustangwayrobots.github.io'];
-    const RULES_REPO = 'club-info-and-guides';   // shown in the "Club Info & Guidelines" box
+    const RULES_REPO = 'Club-Info-and-Guides';   // shown in the "Club Info & Guidelines" box (spelling must match the repo name exactly)
     const FIRMWARE_TOPICS = ['firmware', 'embedded', 'microcontroller', 'esp32', 'attiny', 'arduino'];
     const CACHE_KEY = 'mwr-repos-v2';
     const CACHE_MINUTES = 15;   // GitHub allows ~60 list requests per hour per school network
 
     // Featured section. "parts" are shown side by side, each with its own buttons.
-    // These repos are left out of the project library so their Flash button only appears here.
-    const FEATURED = {
+        const FEATURED = {
       title: 'ESP-NOW RC Car',
       description: 'A custom-PCB RC car and handheld controller built around the ESP32-C3, talking over low-latency ESP-NOW. Two N20 gear motors, a DRV8833 driver, a servo weapon and a 1S LiPo. Next year it becomes an ant-weight battle bot.',
       image: `https://${ORG}.github.io/ESP_NOW_CAR/docs/images/Assembled_Chassis.jpg`,
@@ -425,7 +419,7 @@
     const pagesUrl = (repo) => `https://${ORG}.github.io/${repo}/`;
     const repoUrl = (repo) => `https://github.com/${ORG}/${repo}`;
     const isFirmware = (r) => (r.topics || []).some(t => FIRMWARE_TOPICS.includes(t.toLowerCase()));
-    const SHOWN_ELSEWHERE = [RULES_REPO, ...FEATURED.parts.map(p => p.repo)].map(n => n.toLowerCase());
+    const SHOWN_ELSEWHERE = [RULES_REPO.toLowerCase()];
 
     function timeAgo(iso) {
       const days = Math.floor((Date.now() - new Date(iso)) / 86400000);

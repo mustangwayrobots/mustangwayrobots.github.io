@@ -20,7 +20,9 @@
       firmware / esp32 / arduino / ...  card gets a "Flash firmware" button
                                         (the repo needs a flash/ page)
       admin                             card goes to "Instructor tools" at the
-                                        bottom (collapsed, opens on GitHub)
+                                        bottom (collapsed)
+    A repo with GitHub Pages turned on (it has an index.html) gets an
+    "Open" button that goes to its website.
       hidden                            repo is not shown at all
     The description on each card is the repo's GitHub "About" description.
 
@@ -395,7 +397,7 @@
     const IGNORED_REPOS = ['mustangwayrobots', 'mustangwayrobots.github.io'];
     const RULES_REPO = 'Club-Info-and-Guides';   // shown in the "Club Info & Guidelines" box (spelling must match the repo name exactly)
     const FIRMWARE_TOPICS = ['firmware', 'embedded', 'microcontroller', 'esp32', 'attiny', 'arduino'];
-    const CACHE_KEY = 'mwr-repos-v2';
+    const CACHE_KEY = 'mwr-repos-v3';
     const CACHE_MINUTES = 15;   // GitHub allows ~60 list requests per hour per school network
 
     // Featured section. "parts" are shown side by side, each with its own buttons.
@@ -454,7 +456,8 @@
         const all = await res.json();
         const repos = all.map(r => ({
           name: r.name, description: r.description, topics: r.topics || [],
-          html_url: r.html_url, pushed_at: r.pushed_at, fork: r.fork, archived: r.archived
+          html_url: r.html_url, pushed_at: r.pushed_at, fork: r.fork, archived: r.archived,
+          has_pages: r.has_pages
         }));
         writeCache(repos);
         return { repos, stale: false };
@@ -512,11 +515,15 @@
       const tags = (r.topics || []).filter(t => !hideTags.includes(t.toLowerCase()));
 
       let actions = '';
+      // Repos with a website (an index.html published by GitHub Pages) get an "Open" button.
+      // Firmware repos use their website for the Flash page instead.
       if (admin) {
-        actions = `<a class="btn btn-admin btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">Open on GitHub</a>`;
+        if (r.has_pages) actions += `<a class="btn btn-admin btn-sm" href="${pagesUrl(r.name)}">📂 Open</a>`;
+        actions += `<a class="btn btn-ghost btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">GitHub</a>`;
       } else {
         if (fw) actions += `<a class="btn btn-primary btn-sm" href="${pagesUrl(r.name)}flash/">⚡ Flash firmware</a>`;
-        actions += `<a class="btn btn-ghost btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">Code &amp; docs</a>`;
+        else if (r.has_pages) actions += `<a class="btn btn-primary btn-sm" href="${pagesUrl(r.name)}">📂 Open</a>`;
+        actions += `<a class="btn btn-ghost btn-sm" href="${esc(r.html_url)}" target="_blank" rel="noopener">${fw ? 'Code &amp; docs' : 'GitHub'}</a>`;
       }
 
       return `
